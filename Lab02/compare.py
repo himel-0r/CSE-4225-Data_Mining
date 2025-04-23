@@ -413,7 +413,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def benchmark_support_variation(filename):
-    support_values = list(range(70, 95, 5))
+    support_values = list(range(25, 65, 5))
     apriori_times = []
     fp_growth_times = []
 
@@ -445,10 +445,10 @@ def benchmark_support_variation(filename):
     plt.legend()
     plt.grid(axis='y')
     plt.tight_layout()
-    plt.savefig('time_accidents.png')
+    plt.savefig('time_mushroom.png')
     plt.show()
 
 
 if __name__ == "__main__":
     # main()
-    benchmark_support_variation('accidents.dat')
+    benchmark_support_variation('mushroom.dat')
