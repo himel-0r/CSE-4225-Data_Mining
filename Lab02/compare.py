@@ -379,10 +379,10 @@ def visualize_comparison(apriori_results, fp_growth_results):
     plt.show()
 
 
-def main():
+def main(filename):
     """Main function to run the algorithms and compare results"""
     # Initialize the mining object
-    mining = FrequentItemsetMining('mushroom.dat')
+    mining = FrequentItemsetMining(filename)
     
     print("\n=== APRIORI ALGORITHM ===")
     apriori_results, apriori_times = mining.apriori()
@@ -412,8 +412,9 @@ def main():
 import matplotlib.pyplot as plt
 import numpy as np
 
-def benchmark_support_variation(filename):
-    support_values = list(range(25, 65, 5))
+def benchmark_support_variation(filename, min_sup):
+    max_sup = min(95, min_sup + 50)
+    support_values = list(range(min_sup, max_sup+1, 5))
     apriori_times = []
     fp_growth_times = []
 
@@ -445,10 +446,14 @@ def benchmark_support_variation(filename):
     plt.legend()
     plt.grid(axis='y')
     plt.tight_layout()
-    plt.savefig('time_mushroom.png')
+    plt.savefig('time_.png')
     plt.show()
 
 
 if __name__ == "__main__":
-    # main()
-    benchmark_support_variation('mushroom.dat')
+    files = ['mushroom.dat', 'retail.dat', 'accidents.dat']
+    supports = [25, 20, 60]
+    
+    for i in range(len(files)):
+        # main(files[i])
+        benchmark_support_variation(files[i], supports[i])
