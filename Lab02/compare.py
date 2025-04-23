@@ -1,4 +1,5 @@
 import time
+import math
 import matplotlib.pyplot as plt
 from collections import defaultdict, Counter
 from itertools import combinations
@@ -31,7 +32,7 @@ class FrequentItemsetMining:
                         self.item_counts[item] += 1
             
             # Calculate minimum support count threshold based on percentage
-            self.min_support = len(self.transactions) * self.min_support_percentage / 100
+            self.min_support = math.ceil(len(self.transactions) * self.min_support_percentage / 100)
             print(f"Loaded {len(self.transactions)} transactions")
             print(f"Minimum support count: {self.min_support} ({self.min_support_percentage}% of transactions)")
         except FileNotFoundError:
@@ -408,5 +409,46 @@ def main():
     print("Chart saved as 'algorithm_comparison.png'")
 
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+def benchmark_support_variation(filename):
+    support_values = list(range(70, 95, 5))
+    apriori_times = []
+    fp_growth_times = []
+
+    for support in support_values:
+        print(f"\nRunning for min_support = {support}%")
+        mining = FrequentItemsetMining(filename, min_support_percentage=support)
+
+        print("  Running Apriori...")
+        _, apriori_time_dict = mining.apriori()
+        apriori_total_time = sum(apriori_time_dict.values())
+        apriori_times.append(apriori_total_time)
+
+        print("  Running FP-Growth...")
+        _, fp_growth_time = mining.fp_growth()
+        fp_growth_times.append(fp_growth_time)
+
+    # Bar chart plotting
+    x = np.arange(len(support_values))
+    width = 0.35
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(x - width/2, apriori_times, width, label='Apriori', color='blue')
+    plt.bar(x + width/2, fp_growth_times, width, label='FP-Growth', color='red')
+
+    plt.xlabel('Minimum Support (%)')
+    plt.ylabel('Execution Time (seconds)')
+    plt.title('Execution Time vs Minimum Support')
+    plt.xticks(x, support_values)
+    plt.legend()
+    plt.grid(axis='y')
+    plt.tight_layout()
+    plt.savefig('time_accidents.png')
+    plt.show()
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    benchmark_support_variation('accidents.dat')
