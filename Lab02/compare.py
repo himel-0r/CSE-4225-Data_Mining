@@ -451,9 +451,12 @@ def benchmark_support_variation(filename, min_sup):
 
 
 if __name__ == "__main__":
-    files = ['mushroom.dat', 'retail.dat', 'accidents.dat']
-    supports = [25, 20, 60]
+    # files = ['mushroom.dat', 'retail.dat', 'accidents.dat']
+    # supports = [25, 20, 60]
     
-    for i in range(len(files)):
-        # main(files[i])
-        benchmark_support_variation(files[i], supports[i])
+    # for i in range(len(files)):
+    #     # main(files[i])
+    #     benchmark_support_variation(files[i], supports[i])
+    
+    # main('connect.dat')
+    benchmark_support_variation('connect.dat', 90)

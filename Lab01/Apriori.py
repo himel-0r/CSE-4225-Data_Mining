@@ -123,7 +123,7 @@ if __name__ == "__main__":
     filename = 'mushroom.dat'
     transactions = load_data_from_file(filename)
     
-    for ratio in range (15, 96, 5):
+    for ratio in range (25, 96, 5):
         print("Ratio: ", ratio, ": ")
         main(transactions, ratio)
         print("\n\n\n")
