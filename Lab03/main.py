@@ -166,6 +166,8 @@ class FrequentItemsetMining:
         
         # Calculate peak memory usage
         peak_memory = process.memory_info().rss / (1024 * 1024) - initial_memory
+        if peak_memory < 0:
+            peak_memory = 0
         print(f"FP-Growth peak memory usage: {peak_memory:.2f} MB")
         
         # Group patterns by size
@@ -437,8 +439,8 @@ def visualize_performance(time_data, memory_data):
     plt.savefig('memory_comparison.png')
     plt.show()
 
-def benchmark_support_variation(filename, min_sup=25, max_sup=60):
-    support_values = list(range(min_sup, max_sup + 1, 5))
+def benchmark_support_variation(filename, min_sup=25, max_sup=60, gaps=5):
+    support_values = list(range(min_sup, max_sup + 1, gaps))
     apriori_times = []
     fp_growth_times = []
     apriori_memories = []
@@ -465,11 +467,11 @@ def benchmark_support_variation(filename, min_sup=25, max_sup=60):
     plt.plot(support_values, fp_growth_times, 'ro-', linewidth=2, markersize=8, label='FP-Growth Time')
     plt.xlabel('Minimum Support (%)')
     plt.ylabel('Execution Time (seconds)')
-    plt.title('Execution Time vs Minimum Support')
+    plt.title('Execution Time vs Minimum Support (kosarak)') ###
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
     plt.tight_layout()
-    plt.savefig('execution_time_vs_support.png')
+    plt.savefig('mushroom20_time.png') ###
     plt.show()
 
     # Memory Usage Comparison 
@@ -478,13 +480,17 @@ def benchmark_support_variation(filename, min_sup=25, max_sup=60):
     plt.plot(support_values, fp_growth_memories, 'mo-', linewidth=2, markersize=8, label='FP-Growth Memory')
     plt.xlabel('Minimum Support (%)')
     plt.ylabel('Memory Usage (MB)')
-    plt.title('Memory Usage vs Minimum Support')
+    plt.title('Memory Usage vs Minimum Support (kosarak)') ###
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
     plt.tight_layout()
-    plt.savefig('memory_usage_vs_support.png')
+    plt.savefig('mushroom20_memory.png') ###
     plt.show()
 
 if __name__ == "__main__":
     # main()
-    benchmark_support_variation('mushroom.dat', 35, 75)
+    st_time = time.time()
+    benchmark_support_variation('mushroom.dat', 20, 75, 5)
+    ed_time = time.time()
+    
+    print("Total taken time = ", ed_time - st_time)
