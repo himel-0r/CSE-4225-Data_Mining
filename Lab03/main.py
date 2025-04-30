@@ -294,150 +294,150 @@ class FrequentItemsetMining:
             self._mine_fp_tree(cond_tree, cond_header_table, new_pattern, frequent_patterns)
 
 
-def visualize_comparison(apriori_results, fp_growth_results):
-    # Get all levels
-    all_levels = sorted(set(list(apriori_results.keys()) + list(fp_growth_results.keys())))
+# def visualize_comparison(apriori_results, fp_growth_results):
+#     # Get all levels
+#     all_levels = sorted(set(list(apriori_results.keys()) + list(fp_growth_results.keys())))
     
-    # Count itemsets for each level
-    apriori_counts = [len(apriori_results.get(level, {})) for level in all_levels]
-    fp_growth_counts = [len(fp_growth_results.get(level, {})) for level in all_levels]
+#     # Count itemsets for each level
+#     apriori_counts = [len(apriori_results.get(level, {})) for level in all_levels]
+#     fp_growth_counts = [len(fp_growth_results.get(level, {})) for level in all_levels]
     
-    # Create the bar chart
-    plt.figure(figsize=(10, 6))
+#     # Create the bar chart
+#     plt.figure(figsize=(10, 6))
     
-    # Set up bar positions
-    bar_width = 0.35
-    index = range(len(all_levels))
+#     # Set up bar positions
+#     bar_width = 0.35
+#     index = range(len(all_levels))
     
-    bar1 = plt.bar([i - bar_width/2 for i in index], apriori_counts, bar_width, 
-                   label='Apriori', color='blue', alpha=0.7)
-    bar2 = plt.bar([i + bar_width/2 for i in index], fp_growth_counts, bar_width, 
-                   label='FP-Growth', color='green', alpha=0.7)
+#     bar1 = plt.bar([i - bar_width/2 for i in index], apriori_counts, bar_width, 
+#                    label='Apriori', color='blue', alpha=0.7)
+#     bar2 = plt.bar([i + bar_width/2 for i in index], fp_growth_counts, bar_width, 
+#                    label='FP-Growth', color='green', alpha=0.7)
     
-    # Add labels and title
-    plt.xlabel('Itemset Size')
-    plt.ylabel('Number of Frequent Itemsets')
-    plt.title('Comparison of Frequent Itemsets Found by Algorithm')
-    plt.xticks(index, [f'L{level}' for level in all_levels])
-    plt.legend()
+#     # Add labels and title
+#     plt.xlabel('Itemset Size')
+#     plt.ylabel('Number of Frequent Itemsets')
+#     plt.title('Comparison of Frequent Itemsets Found by Algorithm')
+#     plt.xticks(index, [f'L{level}' for level in all_levels])
+#     plt.legend()
     
-    # Add count labels on top of bars
-    def add_labels(bars):
-        for bar in bars:
-            height = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width()/2., height + 0.5,
-                     f'{int(height)}', ha='center', va='bottom')
+#     # Add count labels on top of bars
+#     def add_labels(bars):
+#         for bar in bars:
+#             height = bar.get_height()
+#             plt.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+#                      f'{int(height)}', ha='center', va='bottom')
     
-    add_labels(bar1)
-    add_labels(bar2)
+#     add_labels(bar1)
+#     add_labels(bar2)
     
-    # Save the bar chart
-    plt.tight_layout()
-    plt.savefig('algorithm_comparison.png')
+#     # Save the bar chart
+#     plt.tight_layout()
+#     plt.savefig('algorithm_comparison.png')
     
-    # Create the line chart for the same data
-    plt.figure(figsize=(10, 6))
+#     # Create the line chart for the same data
+#     plt.figure(figsize=(10, 6))
     
-    plt.plot(all_levels, apriori_counts, 'bo-', linewidth=2, markersize=8, label='Apriori')
-    plt.plot(all_levels, fp_growth_counts, 'go-', linewidth=2, markersize=8, label='FP-Growth')
+#     plt.plot(all_levels, apriori_counts, 'bo-', linewidth=2, markersize=8, label='Apriori')
+#     plt.plot(all_levels, fp_growth_counts, 'go-', linewidth=2, markersize=8, label='FP-Growth')
     
-    # Add data labels
-    for i, v in enumerate(apriori_counts):
-        plt.text(all_levels[i], v + 0.5, str(v), ha='center')
-    for i, v in enumerate(fp_growth_counts):
-        plt.text(all_levels[i], v + 0.5, str(v), ha='center')
+#     # Add data labels
+#     for i, v in enumerate(apriori_counts):
+#         plt.text(all_levels[i], v + 0.5, str(v), ha='center')
+#     for i, v in enumerate(fp_growth_counts):
+#         plt.text(all_levels[i], v + 0.5, str(v), ha='center')
     
-    plt.xlabel('Itemset Size (Level)')
-    plt.ylabel('Number of Frequent Itemsets')
-    plt.title('Comparison of Frequent Itemsets Found (Line Chart)')
-    plt.xticks(all_levels, [f'L{level}' for level in all_levels])
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.legend()
+#     plt.xlabel('Itemset Size (Level)')
+#     plt.ylabel('Number of Frequent Itemsets')
+#     plt.title('Comparison of Frequent Itemsets Found (Line Chart)')
+#     plt.xticks(all_levels, [f'L{level}' for level in all_levels])
+#     plt.grid(True, linestyle='--', alpha=0.7)
+#     plt.legend()
     
-    plt.tight_layout()
-    plt.savefig('itemset_comparison_line.png')
-    plt.show()
+#     plt.tight_layout()
+#     plt.savefig('itemset_comparison_line.png')
+#     plt.show()
 
-def main(filename='mushroom.dat'):
-    """Main function to run the algorithms and compare results"""
-    # Initialize the mining object
-    mining = FrequentItemsetMining(filename)
+# def main(filename='mushroom.dat'):
+#     """Main function to run the algorithms and compare results"""
+#     # Initialize the mining object
+#     mining = FrequentItemsetMining(filename)
     
-    print("\n=== APRIORI ALGORITHM ===")
-    apriori_results, apriori_times, apriori_memory = mining.apriori()
+#     print("\n=== APRIORI ALGORITHM ===")
+#     apriori_results, apriori_times, apriori_memory = mining.apriori()
     
-    print("\n=== FP-GROWTH ALGORITHM ===")
-    fp_growth_results, fp_growth_time, fp_growth_memory = mining.fp_growth()
+#     print("\n=== FP-GROWTH ALGORITHM ===")
+#     fp_growth_results, fp_growth_time, fp_growth_memory = mining.fp_growth()
     
-    # Print summary
-    print("\n=== SUMMARY ===")
-    print("Apriori Algorithm:")
-    total_apriori_time = sum(apriori_times.values())
-    print(f"Total execution time: {total_apriori_time:.4f} seconds")
-    print(f"Memory usage: {apriori_memory:.2f} MB")
+#     # Print summary
+#     print("\n=== SUMMARY ===")
+#     print("Apriori Algorithm:")
+#     total_apriori_time = sum(apriori_times.values())
+#     print(f"Total execution time: {total_apriori_time:.4f} seconds")
+#     print(f"Memory usage: {apriori_memory:.2f} MB")
     
-    print("\nFP-Growth Algorithm:")
-    print(f"Total execution time: {fp_growth_time:.4f} seconds")
-    print(f"Memory usage: {fp_growth_memory:.2f} MB")
+#     print("\nFP-Growth Algorithm:")
+#     print(f"Total execution time: {fp_growth_time:.4f} seconds")
+#     print(f"Memory usage: {fp_growth_memory:.2f} MB")
     
-    # Time improvement
-    time_improvement = (total_apriori_time - fp_growth_time) / total_apriori_time * 100
-    memory_improvement = (apriori_memory - fp_growth_memory) / apriori_memory * 100
-    print(f"\nFP-Growth is {time_improvement:.2f}% faster than Apriori")
-    print(f"FP-Growth uses {memory_improvement:.2f}% less memory than Apriori")
+#     # Time improvement
+#     time_improvement = (total_apriori_time - fp_growth_time) / total_apriori_time * 100
+#     memory_improvement = (apriori_memory - fp_growth_memory) / apriori_memory * 100
+#     print(f"\nFP-Growth is {time_improvement:.2f}% faster than Apriori")
+#     print(f"FP-Growth uses {memory_improvement:.2f}% less memory than Apriori")
     
-    # Visualize comparison
-    print("\nGenerating comparison charts...")
-    visualize_comparison(apriori_results, fp_growth_results)
-    print("Chart saved as 'algorithm_comparison.png'")
+#     # Visualize comparison
+#     print("\nGenerating comparison charts...")
+#     visualize_comparison(apriori_results, fp_growth_results)
+#     print("Chart saved as 'algorithm_comparison.png'")
     
-    # Generate performance comparison charts
-    visualize_performance(
-        {'Apriori': total_apriori_time, 'FP-Growth': fp_growth_time},
-        {'Apriori': apriori_memory, 'FP-Growth': fp_growth_memory}
-    )
-    print("Performance charts saved as 'time_comparison.png' and 'memory_comparison.png'")
+#     # Generate performance comparison charts
+#     visualize_performance(
+#         {'Apriori': total_apriori_time, 'FP-Growth': fp_growth_time},
+#         {'Apriori': apriori_memory, 'FP-Growth': fp_growth_memory}
+#     )
+#     print("Performance charts saved as 'time_comparison.png' and 'memory_comparison.png'")
 
-def visualize_performance(time_data, memory_data):
-    # Time comparison
-    plt.figure(figsize=(10, 6))
-    algorithms = list(time_data.keys())
-    times = list(time_data.values())
+# def visualize_performance(time_data, memory_data):
+#     # Time comparison
+#     plt.figure(figsize=(10, 6))
+#     algorithms = list(time_data.keys())
+#     times = list(time_data.values())
     
-    # Create line graph for time comparison
-    plt.plot(algorithms, times, 'ro-', linewidth=2, markersize=10)
+#     # Create line graph for time comparison
+#     plt.plot(algorithms, times, 'ro-', linewidth=2, markersize=10)
     
-    # Add data labels
-    for i, v in enumerate(times):
-        plt.text(i, v + 0.05, f"{v:.4f}s", ha='center')
+#     # Add data labels
+#     for i, v in enumerate(times):
+#         plt.text(i, v + 0.05, f"{v:.4f}s", ha='center')
     
-    plt.ylabel('Execution Time (seconds)')
-    plt.title('Execution Time Comparison')
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.xticks(range(len(algorithms)), algorithms)
+#     plt.ylabel('Execution Time (seconds)')
+#     plt.title('Execution Time Comparison')
+#     plt.grid(True, linestyle='--', alpha=0.7)
+#     plt.xticks(range(len(algorithms)), algorithms)
     
-    plt.tight_layout()
-    plt.savefig('time_comparison.png')
+#     plt.tight_layout()
+#     plt.savefig('time_comparison.png')
     
-    # Memory comparison
-    plt.figure(figsize=(10, 6))
-    memories = list(memory_data.values())
+#     # Memory comparison
+#     plt.figure(figsize=(10, 6))
+#     memories = list(memory_data.values())
     
-    # Create line graph for memory comparison
-    plt.plot(algorithms, memories, 'bo-', linewidth=2, markersize=10)
+#     # Create line graph for memory comparison
+#     plt.plot(algorithms, memories, 'bo-', linewidth=2, markersize=10)
     
-    # Add data labels
-    for i, v in enumerate(memories):
-        plt.text(i, v + 0.5, f"{v:.2f} MB", ha='center')
+#     # Add data labels
+#     for i, v in enumerate(memories):
+#         plt.text(i, v + 0.5, f"{v:.2f} MB", ha='center')
     
-    plt.ylabel('Memory Usage (MB)')
-    plt.title('Memory Usage Comparison')
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.xticks(range(len(algorithms)), algorithms)
+#     plt.ylabel('Memory Usage (MB)')
+#     plt.title('Memory Usage Comparison')
+#     plt.grid(True, linestyle='--', alpha=0.7)
+#     plt.xticks(range(len(algorithms)), algorithms)
     
-    plt.tight_layout()
-    plt.savefig('memory_comparison.png')
-    plt.show()
+#     plt.tight_layout()
+#     plt.savefig('memory_comparison.png')
+#     plt.show()
 
 def benchmark_support_variation(filename, min_sup=25, max_sup=60, gaps=5):
     support_values = list(range(min_sup, max_sup + 1, gaps))
