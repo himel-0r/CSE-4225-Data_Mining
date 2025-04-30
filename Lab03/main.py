@@ -198,7 +198,7 @@ class FrequentItemsetMining:
                 
         self._insert_tree(items[1:], node.children[item], header_table)
     
-    def _mine_fp_tree(self, tree, header_table, base_pattern, frequent_patterns):
+    def _mine_fp_tree(self, header_table, base_pattern, frequent_patterns):
         for item in sorted(header_table.keys(), key=lambda x: header_table[x][0]):
             new_pattern = base_pattern.copy()
             new_pattern.add(item)
@@ -270,7 +270,7 @@ class FrequentItemsetMining:
             # Recursively mine the conditional FP-tree
             self._mine_fp_tree(cond_tree, cond_header_table, new_pattern, frequent_patterns)
 
-def benchmark_support_variation(filename, min_sup=25, max_sup=60, gaps=5):
+def main(filename, min_sup=25, max_sup=60, gaps=5):
     support_values = list(range(min_sup, max_sup + 1, gaps))
     apriori_times = []
     fp_growth_times = []
@@ -319,9 +319,8 @@ def benchmark_support_variation(filename, min_sup=25, max_sup=60, gaps=5):
     plt.show()
 
 if __name__ == "__main__":
-    # main()
     st_time = time.time()
-    benchmark_support_variation('connect.dat', 95, 100, 1)
+    main('connect.dat', 95, 100, 1)
     ed_time = time.time()
     
     print("Total taken time = ", ed_time - st_time)
