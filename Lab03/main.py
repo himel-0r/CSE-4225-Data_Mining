@@ -467,11 +467,11 @@ def benchmark_support_variation(filename, min_sup=25, max_sup=60, gaps=5):
     plt.plot(support_values, fp_growth_times, 'ro-', linewidth=2, markersize=8, label='FP-Growth Time')
     plt.xlabel('Minimum Support (%)')
     plt.ylabel('Execution Time (seconds)')
-    plt.title('Execution Time vs Minimum Support (kosarak)') ###
+    plt.title('Execution Time vs Minimum Support (connect)') ###
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
     plt.tight_layout()
-    plt.savefig('mushroom20_time.png') ###
+    plt.savefig('connect_time.png') ###
     plt.show()
 
     # Memory Usage Comparison 
@@ -480,17 +480,17 @@ def benchmark_support_variation(filename, min_sup=25, max_sup=60, gaps=5):
     plt.plot(support_values, fp_growth_memories, 'mo-', linewidth=2, markersize=8, label='FP-Growth Memory')
     plt.xlabel('Minimum Support (%)')
     plt.ylabel('Memory Usage (MB)')
-    plt.title('Memory Usage vs Minimum Support (kosarak)') ###
+    plt.title('Memory Usage vs Minimum Support (connect)') ###
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
     plt.tight_layout()
-    plt.savefig('mushroom20_memory.png') ###
+    plt.savefig('connect_memory.png') ###
     plt.show()
 
 if __name__ == "__main__":
     # main()
     st_time = time.time()
-    benchmark_support_variation('mushroom.dat', 20, 75, 5)
+    benchmark_support_variation('connect.dat', 95, 100, 1)
     ed_time = time.time()
     
     print("Total taken time = ", ed_time - st_time)
