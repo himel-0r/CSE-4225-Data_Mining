@@ -1,7 +1,7 @@
 (Min_Sup = 0.4)
 Total memory used by algorithm: 1.69 MB
 Total execution time: 494.75 seconds
-Total number of frequent items: 910
+Total number of frequent items: 911
 
 (Min_Sup = 0.45)
 Total memory used by algorithm: -0.09 MB
