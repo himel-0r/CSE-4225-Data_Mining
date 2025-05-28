@@ -230,8 +230,8 @@ def main(filename, min_sup):
     
     with open(O_file_name, "a") as f:
         f.write(f"(Min_Sup = {min_sup})\n")
-        f.write(f"Total memory used by algorithm: {memory_usages:.2f} MB\n")
-        f.write(f"Total execution time: {execution_time:.2f} seconds\n")
+        f.write(f"Total memory used by algorithm: {memory_usages:.4f} MB\n")
+        f.write(f"Total execution time: {execution_time:.4f} seconds\n")
         f.write(f"Total number of frequent items: {total_frequent_items}\n")
 
 def ESHOP():
