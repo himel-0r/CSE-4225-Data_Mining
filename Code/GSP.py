@@ -95,8 +95,7 @@ def gen_cands(last_lvl_cands):
                     cands.append(new_cand)
         return cands
 
-
-#Ekhan theke pruning shuru korbo...21May
+# Pruning
 def gen_direct_subsequences(sequence):
     #Generate all possible direct subsequences of length k-1
     result = []
