@@ -1,0 +1,382 @@
+import sys
+import os
+import argparse
+from typing import List, Dict, Tuple, Set, Any
+import time
+from collections import defaultdict
+
+# Add parent directory to path to import data_loader
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from data_loader import load_data
+
+class GSP:
+    def __init__(self, min_support_ratio: float = 0.1, verbose: bool = False):
+        """
+        Initialize GSP (Generalized Sequential Patterns) algorithm.
+        
+        Args:
+            min_support_ratio (float): Minimum support ratio (0 to 1)
+            verbose (bool): Whether to print detailed information about patterns
+        """
+        self.min_support_ratio = min_support_ratio
+        self.verbose = verbose
+        self.patterns: Dict[int, List[Tuple[List[List[int]], int]]] = {}  # Length -> [(pattern, support)]
+        self.total_sequences = 0
+        self.min_support = 0
+        self.database: List[List[List[int]]] = []
+
+    def _find_frequent_1_sequences(self) -> Dict[int, int]:
+        """
+        Find all frequent 1-sequences (single items) in the database.
+        
+        Returns:
+            Dict mapping item to its support count
+        """
+        item_count: Dict[int, int] = defaultdict(int)
+        
+        # Count frequency of each item
+        for sequence in self.database:
+            # Keep track of items we've seen in this sequence to avoid counting duplicates
+            seen_items: Set[int] = set()
+            
+            for itemset in sequence:
+                for item in itemset:
+                    if item not in seen_items:
+                        item_count[item] += 1
+                        seen_items.add(item)
+        
+        # Filter items that meet minimum support
+        frequent_items = {item: count for item, count in item_count.items() 
+                         if count >= self.min_support}
+        
+        # Store the frequent 1-sequences
+        self.patterns[1] = [([[item]], count) for item, count in frequent_items.items()]
+        
+        return frequent_items
+    
+    def _is_subsequence(self, pattern: List[List[int]], sequence: List[List[int]]) -> bool:
+        """
+        Check if pattern is a subsequence of sequence.
+        
+        Args:
+            pattern: A candidate pattern
+            sequence: A sequence from the database
+            
+        Returns:
+            True if pattern is a subsequence of sequence, False otherwise
+        """
+        m, n = len(pattern), len(sequence)
+        i = 0  # index for sequence
+        
+        # For each itemset in the pattern, try to find a match in the sequence
+        for p_idx, p_itemset in enumerate(pattern):
+            # Find a matching itemset that contains all items in p_itemset
+            found = False
+            while i < n and not found:
+                # Check if all items in p_itemset are in the current itemset of sequence
+                s_itemset = sequence[i]
+                if all(item in s_itemset for item in p_itemset):
+                    found = True
+                i += 1
+            
+            if not found:
+                return False
+                
+        return True
+    
+    def _count_support(self, candidates: List[List[List[int]]]) -> Dict[Tuple[Tuple[int, ...], ...], int]:
+        """
+        Count support for each candidate pattern.
+        
+        Args:
+            candidates: List of candidate patterns
+            
+        Returns:
+            Dictionary mapping pattern to support count
+        """
+        support_count: Dict[Tuple[Tuple[int, ...], ...], int] = defaultdict(int)
+        
+        # Normalize patterns for dictionary keys
+        pattern_to_original = {}
+        for pattern in candidates:
+            # Convert to hashable representation
+            pattern_key = tuple(tuple(sorted(itemset)) for itemset in pattern)
+            pattern_to_original[pattern_key] = pattern
+        
+        # Count support for each candidate
+        for sequence in self.database:
+            for pattern_key, pattern in pattern_to_original.items():
+                if self._is_subsequence(pattern, sequence):
+                    support_count[pattern_key] += 1
+        
+        # Convert back to original patterns
+        result = {}
+        for pattern_key, count in support_count.items():
+            # Convert from tuple representation back to original pattern
+            original_pattern_key = tuple(map(tuple, pattern_to_original[pattern_key]))
+            result[original_pattern_key] = count
+        
+        return result
+    
+    def _join(self, p: List[List[int]], q: List[List[int]]) -> List[List[List[int]]]:
+        """
+        Join two sequences to generate candidate sequences.
+        
+        Args:
+            p: First sequence
+            q: Second sequence
+            
+        Returns:
+            List of candidate sequences generated by joining
+        """
+        candidates = []
+        
+        # Simple sequence extension for GSP: append the last itemset of q to p
+        # This is a simplified join operation suited for pattern growth
+        # For k=2: We're trying to create patterns like [1] -> [3] from [1] and [3]
+        if len(p) == 1 and len(q) == 1:
+            # For single item sequences, create a new sequence [p] -> [q]
+            seq_extension = p + q
+            candidates.append(seq_extension)
+            return candidates
+            
+        # Sequence extension for longer patterns
+        # Try to match suffix of p with prefix of q to create a new sequence
+        if len(p) > 0 and len(q) > 0:
+            # Case 1: Regular sequence extension
+            # For example: [1] -> [3] and [3] -> [6] can form [1] -> [3] -> [6]
+            if len(p) >= 1 and len(q) >= 1:
+                # Check if the last item(s) of p match the first item(s) of q
+                if p[-1] == q[0]:
+                    seq_extension = p + q[1:]
+                    candidates.append(seq_extension)
+                else:
+                    # Just append q's last itemset to p
+                    seq_extension = p + [q[-1]]
+                    candidates.append(seq_extension)
+            
+            # Case 2: Simple append for item extension
+            # Just append q to p directly
+            if len(q) == 1:
+                seq_extension = p + q
+                candidates.append(seq_extension)
+                
+        return candidates
+    
+    def _candidate_generation(self, frequent_patterns: List[Tuple[List[List[int]], int]]) -> List[List[List[int]]]:
+        """
+        Generate candidate (k+1)-sequences from frequent k-sequences.
+        
+        Args:
+            frequent_patterns: List of (pattern, support) for k-length patterns
+            
+        Returns:
+            List of candidate (k+1)-sequences
+        """
+        candidates = []
+        patterns = [p for p, _ in frequent_patterns]
+        
+        # Self-join
+        for i in range(len(patterns)):
+            for j in range(len(patterns)):
+                joined_candidates = self._join(patterns[i], patterns[j])
+                candidates.extend(joined_candidates)
+        
+        # Remove duplicates
+        unique_candidates = []
+        seen = set()
+        
+        for candidate in candidates:
+            # Convert to hashable representation
+            candidate_key = tuple(tuple(sorted(itemset)) for itemset in candidate)
+            if candidate_key not in seen:
+                seen.add(candidate_key)
+                unique_candidates.append(candidate)
+        
+        return unique_candidates
+    
+    def _get_all_subsequences(self, pattern: List[List[int]], k: int) -> List[List[List[int]]]:
+        """
+        Generate all (k-1)-subsequences of a k-sequence.
+        
+        Args:
+            pattern: A k-sequence
+            k: Length of the pattern
+            
+        Returns:
+            List of all (k-1)-subsequences
+        """
+        subsequences = []
+        
+        # Skip one itemset at a time
+        for i in range(len(pattern)):
+            subsequence = pattern[:i] + pattern[i+1:]
+            if subsequence not in subsequences:
+                subsequences.append(subsequence)
+        
+        return subsequences
+    
+    def _apriori_prune(self, candidates: List[List[List[int]]], 
+                     frequent_patterns: List[Tuple[List[List[int]], int]], k: int) -> List[List[List[int]]]:
+        """
+        Prune candidates using the Apriori property.
+        
+        Args:
+            candidates: List of candidate k-sequences
+            frequent_patterns: List of (pattern, support) for (k-1)-length patterns
+            k: Current pattern length
+            
+        Returns:
+            List of pruned candidates
+        """
+        # If we're dealing with 2-sequences and only have 1-sequences as frequent patterns
+        # we can't really prune using the apriori property, so return all candidates
+        if k == 2:
+            return candidates
+            
+        pruned_candidates = []
+        frequent_pattern_set = set()
+        
+        # Convert frequent patterns to a set of hashable representations
+        for pattern, _ in frequent_patterns:
+            pattern_key = tuple(tuple(sorted(itemset)) for itemset in pattern)
+            frequent_pattern_set.add(pattern_key)
+        
+        for candidate in candidates:
+            # Generate all (k-1)-subsequences
+            subsequences = self._get_all_subsequences(candidate, k)
+            
+            # Check if all subsequences are frequent
+            all_frequent = True
+            for subsequence in subsequences:
+                # Convert to hashable representation
+                sub_key = tuple(tuple(sorted(itemset)) for itemset in subsequence)
+                if sub_key not in frequent_pattern_set:
+                    all_frequent = False
+                    break
+            
+            if all_frequent:
+                pruned_candidates.append(candidate)
+        
+        return pruned_candidates
+    
+    def mine(self, sequences: List[List[List[int]]]) -> Dict[int, List[Tuple[List[List[int]], int]]]:
+        """
+        Mine sequential patterns from the input sequences using GSP algorithm.
+        
+        Args:
+            sequences: Input sequences
+            
+        Returns:
+            Dictionary of patterns grouped by length
+        """
+        start_time = time.time()
+        self.database = sequences
+        self.total_sequences = len(sequences)
+        self.min_support = max(1, int(self.min_support_ratio * self.total_sequences))
+        
+        print(f"Mining with minimum support count: {self.min_support} ({self.min_support_ratio:.2%})")
+        
+        # Initialize patterns dictionary
+        self.patterns = {}
+        
+        # Phase 1: Find frequent 1-sequences
+        frequent_items = self._find_frequent_1_sequences()
+        
+        if not frequent_items:
+            print("No frequent 1-sequences found. Mining complete.")
+            return self.patterns
+        
+        # Phase 2: Iteratively find frequent k-sequences
+        k = 1
+        while k in self.patterns and self.patterns[k]:
+            k += 1
+            
+            # Generate candidate k-sequences
+            frequent_patterns = self.patterns[k-1]
+            candidates = self._candidate_generation(frequent_patterns)
+            
+            if not candidates:
+                break
+                
+            # Prune candidates using Apriori property
+            candidates = self._apriori_prune(candidates, frequent_patterns, k)
+            
+            if not candidates:
+                break
+                
+            # Count support for each candidate
+            candidate_support = self._count_support(candidates)
+            
+            # Filter frequent k-sequences
+            frequent_k_sequences = []
+            for pattern_key, count in candidate_support.items():
+                if count >= self.min_support:
+                    # Convert back from tuple representation
+                    pattern = [list(itemset) for itemset in pattern_key]
+                    frequent_k_sequences.append((pattern, count))
+            
+            if frequent_k_sequences:
+                self.patterns[k] = frequent_k_sequences
+        
+        end_time = time.time()
+        self._print_results(end_time - start_time)
+        
+        return self.patterns
+    
+    def _print_results(self, execution_time: float) -> None:
+        """
+        Print mining results.
+        
+        Args:
+            execution_time: Time taken to mine patterns
+        """
+        total_patterns = sum(len(patterns) for patterns in self.patterns.values())
+        
+        print("\nGSP Results:")
+        print(f"Total frequent sequential patterns found: {total_patterns}")
+        print(f"Execution time: {execution_time:.2f} seconds")
+        
+        # Print pattern count by length
+        print("\nPatterns by length:")
+        for length, patterns in sorted(self.patterns.items()):
+            print(f"  Length {length}: {len(patterns)} patterns")
+        
+        # Print detailed patterns if verbose
+        if self.verbose and total_patterns > 0:
+            print("\nFrequent sequential patterns:")
+            for length, patterns in sorted(self.patterns.items()):
+                print(f"\nLength {length} patterns:")
+                for i, (pattern, support) in enumerate(patterns):
+                    # Format pattern for readability
+                    pattern_str = " -> ".join(str(itemset) for itemset in pattern)
+                    print(f"  Pattern {i+1}: {pattern_str} (support: {support}, {support/self.total_sequences:.2%})")
+
+
+def main() -> None:
+    """Main function to run GSP algorithm from command line."""
+    parser = argparse.ArgumentParser(description='Run GSP algorithm for sequential pattern mining.')
+    parser.add_argument('--dataset', type=str, required=True, help='Path to the dataset file')
+    parser.add_argument('--min_support', type=float, default=0.1,
+                        help='Minimum support ratio (0 to 1, default: 0.1)')
+    parser.add_argument('--verbose', action='store_true', 
+                        help='Print detailed information about extracted patterns')
+    
+    args = parser.parse_args()
+    
+    # Load data
+    print(f"Loading data from {args.dataset}...")
+    try:
+        sequences = load_data(args.dataset)
+        print(f"Loaded {len(sequences)} sequences successfully.")
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return
+    
+    # Create and run GSP
+    gsp = GSP(min_support_ratio=args.min_support, verbose=args.verbose)
+    gsp.mine(sequences)
+
+
+if __name__ == "__main__":
+    main()
