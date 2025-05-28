@@ -264,7 +264,10 @@ def SIGN():
     
 
 if __name__ == "__main__":
-    ESHOP()
-    BMS1()
-    BIKE()
-    SIGN()
+    filename = r"book.txt"
+    main(filename, 0.5)
+    
+    # ESHOP()
+    # BMS1()
+    # BIKE()
+    # SIGN()

@@ -2,6 +2,7 @@ import copy
 import time
 from memory_profiler import memory_usage
 from math import ceil
+import os
 
 def load_data(file_path):
     sequences = []
@@ -118,25 +119,6 @@ def prune_cands(last_lvl_cands, cands_gen):
             if all(any(cand_subseq == freq_seq for freq_seq in last_lvl_cands) 
                  for cand_subseq in gen_direct_subsequences(cand))]
 
-
-# def prune_cands(last_lvl_cands, cands_gen):
-#     """Prune candidates that have any (k-1)-subsequence that is not frequent"""
-#     # Create a set of frequent sequences for faster lookup
-#     freq_seqs = set(tuple(map(tuple, seq)) for seq in last_lvl_cands)
-    
-#     pruned = []
-#     for cand in cands_gen:
-#         valid = True
-#         for subseq in gen_direct_subsequences(cand):
-#             # Convert to tuple for set lookup
-#             subseq_tuple = tuple(map(tuple, subseq))
-#             if subseq_tuple not in freq_seqs:
-#                 valid = False
-#                 break
-#         if valid:
-#             pruned.append(cand)
-    
-#     return pruned
 
 def gsp_print(dataset, min_sup, verbose, output_file="gsp_results.txt"):
     # Open output file
@@ -336,25 +318,18 @@ def format_sequence(sequence):
 
 # Example usage:
 def main(filename, min_sup):
-    file_path_name = r"Q:\Y3S1\4Y-S1\CSE-4225 Data Mining & Warehousing\Labworks\Zisan\DATASET"
+    file_path_name = os.path.join(os.getcwd(), "DATASET")
     file_name = filename
 
     file_path =  file_path_name+ r"\\" +file_name
     sequences = load_data(file_path)
     print(f"Loaded {len(sequences)} sequences from {file_name}")
 
-    # with open("output.txt", "w") as f:
-    # # Convert sequences to string before writing
-    #     for seq in sequences:
-    #         f.write(str(seq) + "\n")
 
-    # min_sup = .40 # support
+    # min_sup = .40 
     print(f"Running GSP with min_sup={min_sup}")
     
-    #RUN GSP with output
-    # output_file = r"C:\Users\Zisan-23\OneDrive\Desktop\Data Mining Lab\Lab4\output.txt"
-    # results = gsp_print(sequences, min_sup, verbose=True, output_file=output_file)
-    
+    gsp_print(sequences, min_sup, verbose=False)   
 
     # Run GSP
     results, memory_usages, execution_time = gsp(sequences, min_sup, verbose=False)
@@ -367,7 +342,7 @@ def main(filename, min_sup):
     print(f"Total execution time: {execution_time:.2f} seconds")
     print(f"Total number of frequent items: {total_frequent_items}")
     
-    O_file_path = r"Q:\Y3S1\4Y-S1\CSE-4225 Data Mining & Warehousing\Labworks\Zisan\Output"
+    O_file_path = os.path.join(os.getcwd(), "Output")
     O_file_name = O_file_path + r"\\" + file_name
     with open(O_file_name, "a") as f:
         f.write(f"(Min_Sup = {min_sup})\n")
@@ -382,9 +357,16 @@ def main(filename, min_sup):
     
     # print(f"\nTotal frequent sequences found: {len(results)}")
     
+def ESHOP():
+    filename = r"e_shop.txt"
+    sups = [0.4, 0.45, 0.5, 0.55, 0.60, 0.65, 0.75]
+    
+    for sup in sups:
+        main(filename, sup)
+
 def BMS1():
     filename = r"BMS1_spmf.txt"
-    sups = [0.02, 0.03, 0.04, 0.05, 0.06, 0.07]
+    sups = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07]
     
     for sup in sups:
         main(filename, sup)
@@ -405,10 +387,10 @@ def SIGN():
     
 
 if __name__ == "__main__":
-    # sups = [.45, .55, .60, .65, .75]
-    # for sup in sups:
-    #     main(sup)
+    filename = r"book.txt"
+    main(filename, 0.5)
     
-    BMS1()
-    BIKE()
-    SIGN()
+    # ESHOP()
+    # BMS1()
+    # BIKE()
+    # SIGN()

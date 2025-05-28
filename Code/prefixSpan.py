@@ -65,9 +65,12 @@ class PrefixSpan:
             new_prefix.append([item])
             self.patterns[pattern_length].append((new_prefix, support))
             new_projected_db = self._project_database(projected_db, item)
-            print(prefix)
+            # print(prefix)
             # print(new_projected_db)
             self._mine_sequential_patterns(new_prefix, new_projected_db, pattern_length + 1)
+            
+            # if prefix:
+                # print(prefix)
     
     def mine(self, sequences):
         start_time = time.time()
@@ -100,7 +103,7 @@ class PrefixSpan:
         print("\nPatterns by length:")
         for length, patterns in sorted(self.patterns.items()):
             print(f"  Length {length}: {len(patterns)} patterns")
-            print(patterns)
+            # print(patterns)
         
         # Print detailed patterns if verbose
         if self.verbose and total_patterns > 0:
@@ -125,5 +128,29 @@ def main(filename, min_sup):
     prefixspan.mine(sequences)
 
 
+def BMS1():
+    filename = r"BMS1_spmf.txt"
+    sups = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07]
+    
+    for sup in sups:
+        main(filename, sup)
+        
+def BIKE():
+    filename = r"BIKE.txt"
+    sups = [0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25]
+    
+    for sup in sups:
+        main(filename, sup)
+        
+def SIGN():
+    filename = r"SIGN.txt"
+    sups = [0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]
+    
+    for sup in sups:
+        main(filename, sup)
+        
 if __name__ == "__main__":
-    main('book.txt', 0.50)
+    # main('book.txt', 0.5)
+    # BMS1()
+    # BIKE()
+    SIGN()
