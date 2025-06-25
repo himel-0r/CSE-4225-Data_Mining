@@ -1,3 +1,5 @@
+# Converted from naivebayes.ipynb
+
 import pandas as pd
 import numpy as np
 import csv
@@ -5,17 +7,9 @@ import csv
 from sklearn.metrics import accuracy_score, precision_score, f1_score, roc_auc_score, recall_score
 from sklearn.preprocessing import LabelBinarizer
 
-from ucimlrepo import fetch_ucirepo
 
 
-heart_disease = fetch_ucirepo(id=1) 
-X = heart_disease.data.features
-y = heart_disease.data.targets
-
-df = pd.concat([X, y], axis=1)
-df.rename(columns={y.columns[0]: "Label"}, inplace=True)
-
-
+df = pd.read_csv("iris.csv")
 df.columns
 np.random.seed(0)
 msk = np.random.rand(len(df)) < 0.8
@@ -27,12 +21,21 @@ y_test = X_test['Label']
 X_test = X_test.drop(['Label'],axis=1)
 N, M = df.shape
 
+# train.info()
+
+# train.Label.unique()
+
+'''
+Likelihood_Dict and Priors as global dictionary which would be updated by training and used while predicting
+'''
 Likelihood_Dict= {
 } 
 Priors={
    
 }
 Dict_Labels = dict()
+
+# ---------------------------------------Training Naive Bayes--------------------------------------------    
 
     
 def NaiveBayesTrain(train,targetCol):
@@ -42,6 +45,7 @@ def NaiveBayesTrain(train,targetCol):
     r,c= train.shape
     classes = list(train[targetCol].unique())
     columns = list(train.columns)
+    
     
 # Calculate prior probablity
 
@@ -53,7 +57,9 @@ def NaiveBayesTrain(train,targetCol):
         for elm in val:
             val = round((val.get(elm)/r),2)
             priors.update({key:val})
-               
+            
+# Helper function    
+
     def divide(dic, count):
         n_dic = dict()
         for key in dic.keys():
@@ -61,6 +67,8 @@ def NaiveBayesTrain(train,targetCol):
             n_dic.update({key:val})
         return n_dic
     
+# Calculate likelihood values
+
     def cal_likelihood(data,cls):
         n,m = data.shape
         
@@ -77,6 +85,8 @@ def NaiveBayesTrain(train,targetCol):
             else:    
                 likelihood_dict.update({cls:dic})
                 
+#  Update likeliood dictionary
+
     for cls in classes:
         data_ = train.loc[train[targetCol]== cls]
         cal_likelihood(data_,cls)
@@ -144,52 +154,32 @@ def NaiveBayesPredict(test,target):
 
     predict =  (predict.T[0])
     return predict
-
+    
 
 Likelihood_Dict, Priors = NaiveBayesTrain(X_train,"Label")
 y_pred = NaiveBayesPredict(X_test, y_test)
-# print(y_pred)
 
 # Convert to arrays if needed
 y_test_array = np.array(y_test)
 y_pred_array = np.array(y_pred)
 
-total_times = 10
-ac0 = 0
-prc0 = 0
-f10 = 0
-rec0 = 0
-auc0 = 0
-for times in range(total_times):
-    # Compute metrics
-    acc = accuracy_score(y_test_array, y_pred_array)
-    prec = precision_score(y_test_array, y_pred_array, average='macro')  # or 'weighted'
-    f1 = f1_score(y_test_array, y_pred_array, average='macro')
-    rec = recall_score(y_test_array, y_pred_array, average='macro')  # or 'weighted'
+# Compute metrics
+acc = accuracy_score(y_test_array, y_pred_array)
+prec = precision_score(y_test_array, y_pred_array, average='macro')  # or 'weighted'
+f1 = f1_score(y_test_array, y_pred_array, average='macro')
+rec = recall_score(y_test_array, y_pred_array, average='macro')  # or 'weighted'
 
-    # For AUC: Need binary/one-hot encoded labels
-    lb = LabelBinarizer()
-    y_test_bin = lb.fit_transform(y_test_array)
-    y_pred_bin = lb.transform(y_pred_array)
+# For AUC: Need binary/one-hot encoded labels
+lb = LabelBinarizer()
+y_test_bin = lb.fit_transform(y_test_array)
+y_pred_bin = lb.transform(y_pred_array)
 
-    try:
-        auc = roc_auc_score(y_test_bin, y_pred_bin, average='macro')
-    except ValueError:
-        auc = "AUC not defined for this case."
-        
-    ac0 += acc
-    prc0 += prec
-    rec0 += rec
-    f10 += f1
-    auc0 += auc
+try:
+    auc = roc_auc_score(y_test_bin, y_pred_bin, average='macro')
+except ValueError:
+    auc = "AUC not defined for this case."
 
-acc = ac0 / total_times
-prec = prc0 / total_times
-rec = rec0 / total_times
-f1 = f10 / total_times
-auc = auc0 / total_times
-
-print("Final Metrics: (nb)")
+print("Final Metrics:")
 print(f"Accuracy : {acc:.4f}")
 print(f"Precision: {prec:.4f}")
 print(f"Recall   : {rec:.4f}")

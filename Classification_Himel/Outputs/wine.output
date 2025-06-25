@@ -1,0 +1,13 @@
+Final Metrics: (nb)
+Accuracy : 0.8824
+Precision: 0.8788
+Recall   : 0.8860
+F1 Score : 0.8778
+AUC      : 0.9151
+
+(dt)
+Accuracy : 0.3529
+Precision: 0.3851
+Recall   : 0.3529
+F1 Score : 0.3243
+AUC      : 0.4998

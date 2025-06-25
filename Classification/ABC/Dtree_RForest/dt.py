@@ -4,20 +4,10 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.preprocessing import LabelEncoder, label_binarize
 import numpy as np
 
+# Load and preprocess CSV data
+df = pd.read_csv("iris.csv")
 
-# df = pd.read_csv("iris.csv")
-
-from ucimlrepo import fetch_ucirepo
-
-heart_disease = fetch_ucirepo(id=1) 
-X = heart_disease.data.features
-y = heart_disease.data.targets
-
-df = pd.concat([X, y], axis=1)
-df.rename(columns={y.columns[0]: "Label"}, inplace=True)
-
-
-
+# Handle "more" in "children" feature if present
 if 'children' in df.columns:
     df['children'] = df['children'].replace('more', '100')
 
@@ -134,17 +124,16 @@ average_type = "weighted" if len(set(y_true)) > 2 else "binary"
 y_true_arr = np.array(y_true)
 y_pred_arr = np.array(y_pred)
 
-print("(dt)")
-print("Accuracy : %.4f" % accuracy_score(y_true_arr, y_pred_arr))
+print("Accuracy: %.4f" % accuracy_score(y_true_arr, y_pred_arr))
 print("Precision: %.4f" % precision_score(y_true_arr, y_pred_arr, average=average_type, zero_division=0))
-print("Recall   : %.4f" % recall_score(y_true_arr, y_pred_arr, average=average_type, zero_division=0))
-print("F1 Score : %.4f" % f1_score(y_true_arr, y_pred_arr, average=average_type, zero_division=0))
+print("Recall: %.4f" % recall_score(y_true_arr, y_pred_arr, average=average_type, zero_division=0))
+print("F1 Score: %.4f" % f1_score(y_true_arr, y_pred_arr, average=average_type, zero_division=0))
 
 # AUC (only for binary or one-vs-rest multi-class)
 try:
     y_true_bin = label_binarize(y_true_arr, classes=list(set(y_true_arr)))
     y_pred_bin = label_binarize(y_pred_arr, classes=list(set(y_true_arr)))
     auc = roc_auc_score(y_true_bin, y_pred_bin, average="macro", multi_class="ovo")
-    print("AUC      : %.4f" % auc)
+    print("AUC: %.4f" % auc)
 except:
     print("AUC: Cannot be calculated for single-class or invalid prediction case.")
