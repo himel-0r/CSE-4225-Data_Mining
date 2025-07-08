@@ -1,0 +1,49 @@
+
+Results for k=2:
+WCSS: 152.3687
+Silhouette Score: 0.6808
+
+Results for k=3:
+WCSS: 78.9408
+Silhouette Score: 0.5526
+
+Results for k=4:
+WCSS: 57.4733
+Silhouette Score: 0.4951
+
+Results for k=5:
+WCSS: 46.5616
+Silhouette Score: 0.4929
+
+Results for k=6:
+WCSS: 39.2779
+Silhouette Score: 0.3664
+
+Results for k=7:
+WCSS: 34.9155
+Silhouette Score: 0.3502
+
+Results for k=8:
+WCSS: 32.8859
+Silhouette Score: 0.3417
+
+Results for k=9:
+WCSS: 29.3307
+Silhouette Score: 0.3397
+
+Results for k=10:
+WCSS: 28.1911
+Silhouette Score: 0.3112
+
+Summary of Metrics:
+k	WCSS		Silhouette Score
+----------------------------------------
+2	152.3687	0.6808
+3	78.9408		0.5526
+4	57.4733		0.4951
+5	46.5616		0.4929
+6	39.2779		0.3664
+7	34.9155		0.3502
+8	32.8859		0.3417
+9	29.3307		0.3397
+10	28.1911		0.3112
