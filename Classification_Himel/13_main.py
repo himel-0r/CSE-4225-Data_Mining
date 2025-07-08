@@ -158,7 +158,6 @@ def naive_bayes(dataset_id):
         
     return acc, prec, f1, rec, auc
 
-
 def decision_tree(dataset_id):
     datab = fetch_ucirepo(id=dataset_id) 
     X = datab.data.features
@@ -308,7 +307,7 @@ def main(id):
     dt_f1 = 0
     dt_auc = 0
     
-    cycle_count = 10
+    cycle_count = 1
     
     for i in range(cycle_count):
         ac, pr, rc, f1, au = naive_bayes(dataset_id)
