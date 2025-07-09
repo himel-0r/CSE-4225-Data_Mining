@@ -40,7 +40,6 @@ def filter_numerical_features(dataset):
     print("All features are numerical. Proceeding with clustering...")
     return dataset, []
 
-
 def preprocess_data(X):
     print("Preprocessing data...")
     
@@ -61,7 +60,6 @@ def preprocess_data(X):
     print("Data preprocessing completed.")
     
     return X_scaled, scaler, valid_indices
-
 
 class KMeansClusterer:
     def __init__(self, k, max_iters=100, tolerance=1e-4, init_method='kmeans++', random_state=42):

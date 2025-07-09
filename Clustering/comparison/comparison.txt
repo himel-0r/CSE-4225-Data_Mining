@@ -298,6 +298,7 @@ Land Mines:
     - Silhouette Score: 0.2053
     - Number of clusters: 8
     - Noise ratio: 0.5592
+    - Inertia: 611.8922
 
 Iris:
   K-Means:
@@ -311,6 +312,7 @@ Iris:
     - Silhouette Score: 0.6235
     - Number of clusters: 2
     - Noise ratio: 0.1000
+    - Inertia: 611.8922
 
 Wine:
   K-Means:
