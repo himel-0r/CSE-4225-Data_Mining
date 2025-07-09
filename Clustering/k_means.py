@@ -169,7 +169,7 @@ class KMeansClusterer:
         return self.labels_
     
 
-def find_inertias(X, max_k=10):
+def find_inertias(X, max_k=5):
     print(f"Finding optimal number of clusters (k=1 to {max_k})...")
     
     inertias = []

@@ -60,7 +60,7 @@ def load_dataset_by_id(dataset_id):
         print(f"❌ Error loading dataset {dataset_id}: {str(e)}")
         return None, None, None, None
 
-def run_kmeans_analysis(X, dataset_name, max_k=10):
+def run_kmeans_analysis(X, dataset_name, max_k=5):
     print(f"Running K-means analysis for {dataset_name}...")
     
     # Find optimal k using elbow method
@@ -109,11 +109,11 @@ def run_dbscan_analysis(X, dataset_name):
     # Adjust max_combinations based on dataset size for efficiency
     n_samples = X.shape[0]
     if n_samples > 2000:
-        max_combinations = 10  # Reduce combinations for large datasets
+        max_combinations = 5  # Reduce combinations for large datasets
     elif n_samples > 1000:
-        max_combinations = 15
+        max_combinations = 10
     else:
-        max_combinations = 20
+        max_combinations = 15
     
     print(f"   Using {max_combinations} parameter combinations for {n_samples} samples")
     

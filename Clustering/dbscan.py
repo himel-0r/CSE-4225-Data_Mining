@@ -184,12 +184,12 @@ def calculate_silhouette_coefficient(X, labels):
     return np.mean(silhouette_scores)
 
 
-def find_optimal_parameters(X, eps_range=None, min_samples_range=None, max_combinations=50):
+def find_optimal_parameters(X, eps_range=None, min_samples_range=None, max_combinations=10):
     print("Finding optimal DBSCAN parameters...")
     
     if eps_range is None:
         print("  - Computing k-distance graph for eps range selection...")
-        k = min(10, max(4, int(np.log(len(X)))))
+        k = min(5, max(4, int(np.log(len(X)))))
         distances = []
         for point in X:
             dists = [np.linalg.norm(point - other) for other in X]
