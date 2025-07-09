@@ -382,6 +382,8 @@ Breast Cancer Wisconsin (Original):
     - Silhouette Score: 1.0000
     - Number of clusters: 20
     - Noise ratio: 0.6779
+    - Inertia: 2756.7912
+    
 
 Estimation of Obesity Levels Based On Eating Habits and Physical Condition :
   K-Means:

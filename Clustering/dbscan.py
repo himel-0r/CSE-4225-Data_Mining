@@ -189,7 +189,6 @@ def calculate_dbscan_inertia(X, labels):
 
     for cluster_id in unique_labels:
         if cluster_id == -1:
-            # Skip noise
             continue
         cluster_points = X[labels == cluster_id]
         if len(cluster_points) == 0:
