@@ -183,6 +183,22 @@ def calculate_silhouette_coefficient(X, labels):
     
     return np.mean(silhouette_scores)
 
+def calculate_dbscan_inertia(X, labels):
+    unique_labels = np.unique(labels)
+    inertia = 0.0
+
+    for cluster_id in unique_labels:
+        if cluster_id == -1:
+            # Skip noise
+            continue
+        cluster_points = X[labels == cluster_id]
+        if len(cluster_points) == 0:
+            continue
+        centroid = np.mean(cluster_points, axis=0)
+        distances = np.linalg.norm(cluster_points - centroid, axis=1)
+        inertia += np.sum(distances ** 2)
+    return inertia
+
 
 def find_optimal_parameters(X, eps_range=None, min_samples_range=None, max_combinations=10):
     print("Finding optimal DBSCAN parameters...")

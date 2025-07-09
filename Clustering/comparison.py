@@ -731,12 +731,6 @@ def main():
     print("\n3. Creating cluster size comparisons...")
     plot_cluster_size_comparison_per_dataset(all_results, output_folder)
     
-    # print("\n4. Creating silhouette score by parameters plots...")
-    # plot_silhouette_score_by_parameters(all_results, output_folder)
-    
-    # print("\n5. Creating noise ratio by parameters plots...")
-    # plot_noise_ratio_by_parameters(all_results, output_folder)
-    
     print("\n6. Creating clustering visualizations...")
     plot_clustering_visualizations(all_results, output_folder)
     
@@ -750,8 +744,6 @@ def main():
     print(f"- 1_elbow_method_all_datasets.png: Elbow curves for all datasets")
     print(f"- 2_silhouette_analysis_*.png: Silhouette comparison per dataset")
     print(f"- 3_cluster_sizes_*.png: Cluster size comparison per dataset")
-    # print(f"- 4_silhouette_by_params_*.png: DBSCAN silhouette by parameters")
-    # print(f"- 5_noise_ratio_by_params_*.png: DBSCAN noise ratio by parameters")
     print(f"- 6_clustering_visualization_*.png: Clustering results visualization")
     print(f"- comparison.txt: Comprehensive comparison report")
     

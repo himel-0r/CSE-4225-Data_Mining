@@ -312,7 +312,7 @@ Iris:
     - Silhouette Score: 0.6235
     - Number of clusters: 2
     - Noise ratio: 0.1000
-    - Inertia: 611.8922
+    - Inertia: 222.1296
 
 Wine:
   K-Means:
@@ -326,6 +326,7 @@ Wine:
     - Silhouette Score: 0.3564
     - Number of clusters: 2
     - Noise ratio: 0.3427
+    - Inertia: 1411.8732
 
 Wholesale customers:
   K-Means:
@@ -339,6 +340,7 @@ Wholesale customers:
     - Silhouette Score: 0.5629
     - Number of clusters: 2
     - Noise ratio: 0.2318
+    - Inertia: 1685.0019
 
 Heart Disease:
   K-Means:
@@ -352,6 +354,7 @@ Heart Disease:
     - Silhouette Score: 0.4072
     - Number of clusters: 2
     - Noise ratio: 0.6869
+    - Inertia: 3017.8127
 
 Heart Failure Clinical Records:
   K-Means:
@@ -365,6 +368,7 @@ Heart Failure Clinical Records:
     - Silhouette Score: 0.1832
     - Number of clusters: 2
     - Noise ratio: 0.5318
+    - Inertia: 3201.8912
 
 Breast Cancer Wisconsin (Original):
   K-Means:
