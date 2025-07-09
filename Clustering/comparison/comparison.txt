@@ -36,6 +36,22 @@ Estimation of Obesity Levels Based On Eating Habits and Physical Condition :
   - Samples: 2111
   - Features: 8
 
+Energy Efficiency:
+  - Samples: 768
+  - Features: 8
+
+Credit Approval:
+  - Samples: 666
+  - Features: 6
+
+Chronic Kidney Disease:
+  - Samples: 203
+  - Features: 14
+
+Statlog (German Credit Data):
+  - Samples: 1000
+  - Features: 7
+
 
 ================================================================================
 1. CLUSTER SIZE COMPARISON
@@ -168,6 +184,81 @@ DBSCAN (eps=0.778, min_samples=11):
   Cluster 11: 14 points (0.7%)
   Noise: 1606 points (76.1%)
 
+ENERGY EFFICIENCY
+-----------------
+K-Means (k=2):
+  Cluster 0: 384 points (50.0%)
+  Cluster 1: 384 points (50.0%)
+
+DBSCAN (eps=0.894, min_samples=4):
+  Cluster 0: 12 points (1.6%)
+  Cluster 1: 24 points (3.1%)
+  Cluster 2: 20 points (2.6%)
+  Cluster 3: 20 points (2.6%)
+  Cluster 4: 60 points (7.8%)
+  Cluster 5: 20 points (2.6%)
+  Cluster 6: 120 points (15.6%)
+  Cluster 7: 20 points (2.6%)
+  Cluster 8: 20 points (2.6%)
+  Cluster 9: 60 points (7.8%)
+  Cluster 10: 20 points (2.6%)
+  Cluster 11: 120 points (15.6%)
+  Cluster 12: 20 points (2.6%)
+  Cluster 13: 20 points (2.6%)
+  Cluster 14: 60 points (7.8%)
+  Cluster 15: 20 points (2.6%)
+  Cluster 16: 120 points (15.6%)
+  Noise: 12 points (1.6%)
+
+CREDIT APPROVAL
+---------------
+K-Means (k=2):
+  Cluster 0: 556 points (83.5%)
+  Cluster 1: 110 points (16.5%)
+
+DBSCAN (eps=0.984, min_samples=3):
+  Cluster 0: 536 points (80.5%)
+  Cluster 1: 8 points (1.2%)
+  Cluster 2: 4 points (0.6%)
+  Cluster 3: 3 points (0.5%)
+  Cluster 4: 3 points (0.5%)
+  Noise: 112 points (16.8%)
+
+CHRONIC KIDNEY DISEASE
+----------------------
+K-Means (k=2):
+  Cluster 0: 134 points (66.0%)
+  Cluster 1: 69 points (34.0%)
+
+DBSCAN (eps=2.348, min_samples=9):
+  Cluster 0: 135 points (66.5%)
+  Cluster 1: 5 points (2.5%)
+  Noise: 63 points (31.0%)
+
+STATLOG (GERMAN CREDIT DATA)
+----------------------------
+K-Means (k=3):
+  Cluster 0: 543 points (54.3%)
+  Cluster 1: 176 points (17.6%)
+  Cluster 2: 281 points (28.1%)
+
+DBSCAN (eps=0.634, min_samples=9):
+  Cluster 0: 53 points (5.3%)
+  Cluster 1: 10 points (1.0%)
+  Cluster 2: 9 points (0.9%)
+  Cluster 3: 53 points (5.3%)
+  Cluster 4: 16 points (1.6%)
+  Cluster 5: 32 points (3.2%)
+  Cluster 6: 9 points (0.9%)
+  Cluster 7: 18 points (1.8%)
+  Cluster 8: 13 points (1.3%)
+  Cluster 9: 10 points (1.0%)
+  Cluster 10: 8 points (0.8%)
+  Cluster 11: 9 points (0.9%)
+  Cluster 12: 9 points (0.9%)
+  Cluster 13: 15 points (1.5%)
+  Noise: 736 points (73.6%)
+
 
 ================================================================================
 2. SILHOUETTE SCORE COMPARISON
@@ -182,11 +273,15 @@ Iris                 0.5802          0.6235          DBSCAN
 Wine                 0.2844          0.3564          DBSCAN    
 Wholesale customers  0.4496          0.5629          DBSCAN    
 Heart Disease        0.1757          0.4072          DBSCAN    
-Heart Failure Clinical Records 0.0988          0.1832          DBSCAN    
-Breast Cancer Wisconsin (Original) 0.5734          1.0000          DBSCAN    
-Estimation of Obesity Levels Based On Eating Habits and Physical Condition  0.1401          0.5456          DBSCAN    
+Heart Failure        0.0988          0.1832          DBSCAN    
+Breast Cancer        0.5734          1.0000          DBSCAN    
+Obesity              0.1401          0.5456          DBSCAN    
+Energy Efficiency    0.3906          0.1111          K-Means   
+Credit Approval      0.4426          0.2874          K-Means   
+Kidney Disease       0.4029          0.3556          K-Means   
+Statlog              0.1965          0.3206          DBSCAN    
 -----------------------------------------------------------------
-Total Wins: K-Means=1, DBSCAN=7
+Total Wins: K-Means=4, DBSCAN=8
 
 Detailed Analysis:
 --------------------
@@ -295,6 +390,58 @@ Estimation of Obesity Levels Based On Eating Habits and Physical Condition :
     - Number of clusters: 12
     - Noise ratio: 0.7608
 
+Energy Efficiency:
+  K-Means:
+    - Optimal k: 2
+    - Silhouette Score: 0.3906
+    - Inertia: 3497.2336
+    - All points clustered (no noise)
+  DBSCAN:
+    - Optimal eps: 0.8944
+    - Optimal min_samples: 4
+    - Silhouette Score: 0.1111
+    - Number of clusters: 17
+    - Noise ratio: 0.0156
+
+Credit Approval:
+  K-Means:
+    - Optimal k: 2
+    - Silhouette Score: 0.4426
+    - Inertia: 3188.6493
+    - All points clustered (no noise)
+  DBSCAN:
+    - Optimal eps: 0.9841
+    - Optimal min_samples: 3
+    - Silhouette Score: 0.2874
+    - Number of clusters: 5
+    - Noise ratio: 0.1682
+
+Chronic Kidney Disease:
+  K-Means:
+    - Optimal k: 2
+    - Silhouette Score: 0.4029
+    - Inertia: 1824.2204
+    - All points clustered (no noise)
+  DBSCAN:
+    - Optimal eps: 2.3475
+    - Optimal min_samples: 9
+    - Silhouette Score: 0.3556
+    - Number of clusters: 2
+    - Noise ratio: 0.3103
+
+Statlog (German Credit Data):
+  K-Means:
+    - Optimal k: 3
+    - Silhouette Score: 0.1965
+    - Inertia: 5044.5131
+    - All points clustered (no noise)
+  DBSCAN:
+    - Optimal eps: 0.6341
+    - Optimal min_samples: 9
+    - Silhouette Score: 0.3206
+    - Number of clusters: 14
+    - Noise ratio: 0.7360
+
 ================================================================================
 3. ALGORITHM CHARACTERISTICS SUMMARY
 ================================================================================
@@ -318,8 +465,8 @@ DBSCAN Characteristics:
 RECOMMENDATIONS:
 --------------------
 Average Silhouette Scores:
-- K-Means: 0.3274
-- DBSCAN: 0.4855
+- K-Means: 0.3377
+- DBSCAN: 0.4132
 
 Overall Recommendation: DBSCAN performs better on average across all datasets.
 
@@ -332,3 +479,7 @@ Dataset-specific recommendations:
 - Heart Failure Clinical Records: Use DBSCAN (silhouette: 0.1832 vs 0.0988)
 - Breast Cancer Wisconsin (Original): Use DBSCAN (silhouette: 1.0000 vs 0.5734)
 - Estimation of Obesity Levels Based On Eating Habits and Physical Condition : Use DBSCAN (silhouette: 0.5456 vs 0.1401)
+- Energy Efficiency: Use K-Means (silhouette: 0.3906 vs 0.1111)
+- Credit Approval: Use K-Means (silhouette: 0.4426 vs 0.2874)
+- Chronic Kidney Disease: Use K-Means (silhouette: 0.4029 vs 0.3556)
+- Statlog (German Credit Data): Use DBSCAN (silhouette: 0.3206 vs 0.1965)

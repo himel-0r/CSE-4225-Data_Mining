@@ -6,5 +6,9 @@
     "heart_disease": 45,
     "heart_failure": 519,
     "breast_cancer": 15,
-    "obesity": 544    
+    "obesity": 544,
+    "energy": 242,
+    "credit": 27,
+    "kidney": 336,
+    "statlog": 144
 }
